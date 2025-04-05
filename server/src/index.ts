@@ -12,11 +12,14 @@ import {
 } from "./functions";
 import { createInitialBallsTrianglePositions } from "./ballsUtils";
 import { FRAMES_PER_SECOND } from "./constants";
+import { config } from "dotenv";
+
+config();
 
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
-  cors: { origin: "*" },
+  cors: { origin: process.env.CLIENT_PRODUCTION_URL ?? "*" },
 });
 app.use(cors());
 
