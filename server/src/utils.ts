@@ -50,6 +50,7 @@ export function createRoom(roomId: string, creator: User): Room {
     currentTurn: creator.socketId,
     status: "waiting",
     winnerSocketId: null,
+    messages: [],
 
     // pobieranie wszystkich graczy w pokoju, ktorzy nie sa null
     players() {
@@ -84,6 +85,11 @@ export function createRoom(roomId: string, creator: User): Room {
         return deletedUser;
       }
       return null;
+    },
+
+    // dodawanie nowej wiadomosci do obiektu
+    addMessage(text, author) {
+      this.messages = [...this.messages, { text, author }];
     },
   };
 

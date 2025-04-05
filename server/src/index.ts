@@ -18,7 +18,6 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: { origin: "*" },
 });
-
 app.use(cors());
 
 export const rooms: RoomMap = new Map();
@@ -87,10 +86,7 @@ io.on("connection", (socket) => {
     const user = { socketId: socket.id, nickname, roomId, ballColor: "red" };
     const room = createRoom(roomId, user);
     const balls = createInitialBallsTrianglePositions("red", "red");
-    console.log(
-      "INDEX",
-      balls.map((b) => b.isPocketed)
-    );
+
     room.balls = balls;
     rooms.set(roomId, room);
     socket.join(roomId);
@@ -186,7 +182,6 @@ io.on("connection", (socket) => {
       room.currentTurn == room.player1?.socketId
         ? (room.currentTurn = room.player2!.socketId)
         : (room.currentTurn = room.player1!.socketId);
-      console.log(room.currentTurn);
       io.to(roomId).emit("strike_ball__success", room, balls);
     }
   );
@@ -219,6 +214,33 @@ io.on("connection", (socket) => {
     room.winnerSocketId = null;
 
     io.to(roomId).emit("start_new_game__success", room);
+  });
+
+  socket.on("send_message", (roomId: string, text: string) => {
+    const room = rooms.get(roomId);
+
+    // sprawdzanie czy pokoj do ktorego chcemy wyslac wiadomosc istnieje
+    if (!room) {
+      socket.emit("send_message__failure", {
+        message: "Can't send message to not existing room",
+      });
+      return;
+    }
+
+    // sprawdzenie czy uzytkownik znajduje sie w tym pokoju
+    if (!room.includesSpecificSocketId(socket.id)) {
+      socket.emit("send_message__failure", {
+        message: "You can't send message that you are not in",
+      });
+      return;
+    }
+
+    // pobieranie autora wiadomosci
+    let author = room.player1;
+    if (!author || author.socketId != socket.id) author = room.player2;
+
+    room.addMessage(text, author!);
+    io.to(roomId).emit("send_message__success", room);
   });
 
   // rozlaczenie uzytkownika
