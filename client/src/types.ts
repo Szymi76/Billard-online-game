@@ -38,8 +38,10 @@ export type Room = {
   currentTurn: string;
   winnerSocketId: string | null;
   status: "waiting" | "in_progress" | "finished";
+  messages: { text: string; author: User }[];
   players: () => User[];
   addPlayer: (newPlayer: User) => void;
   includesSpecificSocketId: (socketId: string) => boolean;
   removePlayer: (socketId: string) => User | null;
+  addMessage: (text: string, author: User) => void;
 };

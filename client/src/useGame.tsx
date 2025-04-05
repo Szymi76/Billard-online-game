@@ -16,6 +16,7 @@ type GameContext = {
   leaveRoom: () => void;
   strikeBall: (ballId: number, angle: number, power: number) => void;
   startNewGame: () => void;
+  sendMessage: (text: string) => void;
 };
 
 export const GameContext = createContext<GameContext | null>(null);
@@ -98,6 +99,15 @@ export const GameProvider = (props: GameProviderProps) => {
       console.log(message);
     });
 
+    socket.on("send_message__success", (room) => {
+      setRoom(room);
+      console.log(room);
+    });
+
+    socket.on("send_message__failure", ({ message }) => {
+      console.log(message);
+    });
+
     return () => {
       socket.off("join_room__success");
       socket.off("join_room__failure");
@@ -109,6 +119,8 @@ export const GameProvider = (props: GameProviderProps) => {
       socket.off("strike_ball__failure");
       socket.off("start_new_game__success");
       socket.off("start_new_game__failure");
+      socket.off("send_message__success");
+      socket.off("send_message__failure");
     };
   }, [user]);
 
@@ -138,6 +150,11 @@ export const GameProvider = (props: GameProviderProps) => {
     socket.emit("start_new_game", room.id);
   };
 
+  const sendMessage = (text: string) => {
+    if (!room) return;
+    socket.emit("send_message", room.id, text);
+  };
+
   const value: GameContext = {
     user,
     room,
@@ -148,6 +165,7 @@ export const GameProvider = (props: GameProviderProps) => {
     leaveRoom,
     strikeBall,
     startNewGame,
+    sendMessage,
   };
 
   return <GameContext.Provider children={props.children} value={value} />;

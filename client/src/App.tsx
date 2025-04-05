@@ -9,9 +9,10 @@ import {
   CreateJoinRoomPopover,
   CreateNewRoomPopover,
 } from "./components/NavbarPopovers";
+import { Chat } from "./components/MessagesComponents";
 
 const App = () => {
-  const { room, leaveRoom, user, startNewGame, balls } = useGame();
+  const { room, leaveRoom, user, startNewGame, balls, sendMessage } = useGame();
   return (
     <>
       <Navbar isBordered className="bg-slate-100">
@@ -45,12 +46,13 @@ const App = () => {
         isIconOnly
         variant="bordered"
         as={Link}
-        href="https://github.com/Szymi76"
+        href="https://github.com/Szymi76/Billard-online-game"
         target="_blank"
         className="absolute right-2 bottom-2 border-black"
       >
         <Github color="black" />
       </Button>
+      {room && <Chat onSend={sendMessage} room={room} />}
     </>
   );
 };
