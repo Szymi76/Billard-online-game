@@ -21,7 +21,7 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: { origin: process.env.CLIENT_PRODUCTION_URL ?? "*" },
 });
-app.use(cors());
+app.use(cors({ origin: process.env.CLIENT_PRODUCTION_URL ?? "*" }));
 
 export const rooms: RoomMap = new Map();
 
