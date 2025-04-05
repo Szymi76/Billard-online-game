@@ -25,6 +25,10 @@ app.use(cors({ origin: process.env.CLIENT_PRODUCTION_URL ?? "*" }));
 
 export const rooms: RoomMap = new Map();
 
+app.get("/", (req, res) => {
+  res.send(String(process.env.CLIENT_PRODUCTION_URL));
+});
+
 io.on("connection", (socket) => {
   // wysylanie adresatowi jego socket.id
   socket.emit("connection__successful", socket.id);
