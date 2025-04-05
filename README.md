@@ -14,7 +14,7 @@
   * Pisać na czacie w czasie rzeczywistym
 
   ![Zdjęcie strony](client/public/pool_game_home_page.png)
-  ![Zdjęcie strony w trakcie rozgrywki](client/public/pool_game_in_game.png)
+  ![Zdjęcie strony w trakcie rozgrywki](client/public/pool_game_in_game_with_chat.png)
   
 ## Aplikacja zbudowana za pomocą
 
