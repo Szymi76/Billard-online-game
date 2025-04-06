@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="<link do stronki>">
+  <a href="http://billard-online-gameclient-g23lakq1o.vercel.app">
     <img src="client/public/8_pool_ball_360x360.png" alt="logo" width="80" height="80">
   </a>
 
